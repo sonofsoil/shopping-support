@@ -1,11 +1,7 @@
 import json
 from langchain.llms import OpenAI
-from langchain.chat_models import ChatOpenAI
 from support_app.core.prompt_templates import date_time_diff_prompt_str
 from langchain.prompts import PromptTemplate
-import langchain
-
-langchain.debug=True
 
 model = "gpt-3.5-turbo"
 temperature = 0.1

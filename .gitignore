@@ -1,0 +1,8 @@
+.venv/
+db.sqlite3
+support_app/__pycache__/
+support_app/core/__pycache__/
+support_app/migrations/
+support_webapp/__pycache__/
+static_collected/
+support_webapp/__init__.py
