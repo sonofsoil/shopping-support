@@ -1,0 +1,17 @@
+{% extends "support_app/layout.html" %}
+{% block title %}
+  What are you buying
+{% endblock %}
+{% block content %}
+  <form method="POST" class="url-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Submit</button>
+  </form>
+  <p>
+    {{ interaction.user_id }}: {{ interaction.user_query }}
+  </p>
+  <p>
+    Ordering Expert: {{ interaction.expert_answer }}
+  </p>
+{% endblock %}
