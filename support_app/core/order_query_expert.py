@@ -1,14 +1,10 @@
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
 from langchain.llms import OpenAI
-from support_app.core.tools import fetch_orders, cancel_order
 from support_app.core.prompt_templates import order_query_prompt_str
+from support_app.core.order_query_tools import SupportTools
 from langchain.prompts import PromptTemplate
 from datetime import datetime
-from langchain.tools import StructuredTool
-from support_app.core.order_tracker_expert import derive_days_to_deliver
-from support_app.core.order_cancel_expert import decide_cancel_order
-from support_app.core.order_identifier_expert import identify_relevant_order
 import langchain
 
 langchain.debug=False
@@ -30,17 +26,11 @@ def answer_order_query(user_id : str, user_query : str) -> str :
     :return: the answer to the user query
     """
 
-    fetch = StructuredTool.from_function(fetch_orders)
-    single = StructuredTool.from_function(identify_relevant_order)
-    ddiff = StructuredTool.from_function(derive_days_to_deliver)
-    decide = StructuredTool.from_function(decide_cancel_order)
-    cancel = StructuredTool.from_function(cancel_order)
-
     now = datetime.now() # current date and time
     # agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
     llm = OpenAI(model_name=model, temperature=temperature) # Also works well with Anthropic models
     agent = initialize_agent(
-        tools = [fetch, single, ddiff, decide, cancel],
+        tools = SupportTools().get_tools(),
         llm = llm,
         agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True)

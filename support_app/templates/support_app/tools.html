@@ -1,0 +1,24 @@
+{% extends "support_app/layout.html" %}
+{% block title %}
+  List of Tools is use :
+{% endblock %}
+{% block content %}
+  <table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tool in tools %}
+            <tr>
+                <td>{{tool.name}}</td>
+                <td>{{tool.type}}</td>
+                <td>{{tool.description}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 
 def fetch_orders(user_id: str) -> dict:
-    """ Fetches the existing orders for the user.
+    """ Fetches the existing orders for the user. If no order found
+    for the user, returns empty list.
     :param user_id: user identifier
     :return: the order list containing order details, including
       order_id, product_id, delivery date, product_title, product_type,
@@ -43,6 +44,7 @@ def fetch_orders(user_id: str) -> dict:
             'product_details' : 'Nominated as one of America’s best-loved novels by PBS’s\
               The Great American Read.'
         }]
+    return []
 
 def cancel_order(userId: str, orderId: str) -> bool:
     """ Cancels user order and return the cancel status.
