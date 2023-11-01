@@ -2,9 +2,7 @@ import json
 from langchain.llms import OpenAI
 from support_app.core.prompt_templates import date_time_diff_prompt_str
 from langchain.prompts import PromptTemplate
-
-model = "gpt-3.5-turbo"
-temperature = 0.1
+from support_app.core.llm_provider import get_gpt_35_llm
 
 def derive_days_to_deliver(current_date : str, delivery_date: str) -> str:
     """ Given current date and time as well as delivery date and
@@ -15,7 +13,7 @@ def derive_days_to_deliver(current_date : str, delivery_date: str) -> str:
     :return: number of days and hours remaining for delivery.
     """
 
-    llm = OpenAI(model_name=model, temperature=temperature)
+    llm = get_gpt_35_llm()
     prompt_template = PromptTemplate.from_template(date_time_diff_prompt_str)
     prompt = prompt_template.format(
         current_date=current_date, delivery_date=delivery_date)

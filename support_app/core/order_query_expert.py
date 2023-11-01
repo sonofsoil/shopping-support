@@ -6,10 +6,11 @@ from support_app.core.order_query_tools import SupportTools
 from langchain.prompts import PromptTemplate
 from datetime import datetime
 import langchain
+from langchain.callbacks.manager import CallbackManager
+from support_app.core.callback_handlers import OrderQueryAgentCallbackHandler
+from support_app.core.llm_provider import get_gpt_35_llm
 
 langchain.debug=False
-model = "gpt-3.5-turbo"
-temperature = 0.1
 
 # query = """When is my order is scheduled for delivery?
 #            It is a small flower vase for holding a bunch of roses.
@@ -28,10 +29,9 @@ def answer_order_query(user_id : str, user_query : str) -> str :
 
     now = datetime.now() # current date and time
     # agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
-    llm = OpenAI(model_name=model, temperature=temperature) # Also works well with Anthropic models
     agent = initialize_agent(
         tools = SupportTools().get_tools(),
-        llm = llm,
+        llm = get_gpt_35_llm(),
         agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True)
 
@@ -42,4 +42,4 @@ def answer_order_query(user_id : str, user_query : str) -> str :
         current_date=now.strftime("%B %d, %Y"),
         input=user_query
     )
-    return agent.run(prompt)
+    return agent.run(prompt, callbacks=[OrderQueryAgentCallbackHandler()])

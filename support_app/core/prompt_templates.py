@@ -14,18 +14,13 @@ order_query_prompt_str = """
 """
 
 order_identifier_prompt_str = """
-    Identify the order from the following user query and order list.
-    If user query has product description, use that to match
-    product_type, product_title or product_description in the
-    order object. Return only when the order matches with the text
-    in user query. If no matching order found, returns empty json
-    structure.
+    You are given a list of orders as follow:
+    {order_list}
 
-    Output a json object that contains the following keys:
-    order_id, product_id, delivery_date, order_status
+    Identify the oder that matches with the following query. if no order match, then do not return anything.
+    If an order match, return the order in json.
 
-    User Query: {user_query}
-    Order List: {order_list}
+    Query: {user_query}
 """
 
 date_time_diff_prompt_str = """
