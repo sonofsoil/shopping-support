@@ -13,14 +13,14 @@
         <p style="width:90%;">
           {{ interaction.user_id }}: {{ interaction.user_query }}
         </p>
-        <p style="width:90%;">
+        <p id = "expert_answer" style="width:90%;">
           Ordering Expert: {{ interaction.expert_answer }}
         </p>
       </div>
       <div class="split right">
         <h2>Trace Console</h2>
         <div class="scrollbox">
-          <p id="trace_console">placeholder</p>
+          <p id="trace_console"></p>
         </div>
       </div>
     </div>
@@ -40,8 +40,28 @@
 
       webSocket.onmessage = function (e) {
         var data = JSON.parse(event.data);
-        console.log(data);
-        document.querySelector('#trace_console').innerText += data.message;
+        switch(data.type) {
+          case "Trace":
+            console.log(data.message)
+            switch(data.message.type) {
+              case "Thought":
+                document.querySelector('#trace_console').innerText += data.message.thought;
+                document.querySelector('#trace_console').innerText += data.message.action;
+                document.querySelector('#trace_console').innerText += data.message.actionInput;
+                break;
+              case "Tool":
+                document.querySelector('#trace_console').innerText += data.message.message;
+                break;
+              case "Answer":
+                document.querySelector('#trace_console').innerText += data.message.thought;
+                document.querySelector('#trace_console').innerText += data.message.answer;
+                break;
+            }
+            break;
+          case "Answer":
+            document.querySelector('#expert_answer').innerText = data.message;
+            break;
+        }
       }
     </script>
 {% endblock %}

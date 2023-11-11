@@ -1,4 +1,5 @@
 import json
+from time import sleep
 from random import randint
 from threading import Thread
 from channels.generic.websocket import WebsocketConsumer
@@ -15,7 +16,7 @@ class QueryWebSocketConsumer(WebsocketConsumer):
         event_pusher.start()
 
     def disconnect(self, close_code):
-        print('bidirectional websocket closed')
+        print('home websocket closed')
 
     # This function receive messages from WebSocket.
     def receive(self, text_data):
@@ -25,7 +26,11 @@ class QueryWebSocketConsumer(WebsocketConsumer):
         user_interaction = UserInteraction(user=user_id,
                                            uquery=user_query)
         expert_answer = user_interaction.get_answer(tracer=self.tracer)
-        self.send(json.dumps({'message' : f"Answer ==> {expert_answer}"}))
+        message = {
+                'type' : 'Answer',
+                'message': f"{expert_answer}"
+            }
+        self.send(json.dumps(message))
 
 class EventPusher(Thread) :
 
@@ -40,6 +45,11 @@ class EventPusher(Thread) :
         try :
             while True :
                 trace = self.tracer.get_trace(timeout=1)
-                self.consumer.send(json.dumps({'message' : f"{trace}\n"}))
+                message = {
+                    'type' : 'Trace',
+                    'message': trace
+                }
+                self.consumer.send(json.dumps(message))
+                sleep(1)
         except Exception as e :
             print(e)
