@@ -20,7 +20,7 @@ source .venv/bin/activate
 Inside the virtual env, upgrade pip and install Django framework -
 ```
 python -m pip install --upgrade pip
-python -m pip install django bs4 lxml requests openai langchain
+python -m pip install django bs4 lxml requests openai langchain channels channels_redis
 ```
 
 Set the OpenAI API Key in your environment

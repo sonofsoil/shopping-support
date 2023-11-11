@@ -1,17 +1,47 @@
 {% extends "support_app/layout.html" %}
 {% block title %}
-  What are you buying
+  Home
 {% endblock %}
 {% block content %}
-  <form method="POST" class="url-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">Submit</button>
-  </form>
-  <p>
-    {{ interaction.user_id }}: {{ interaction.user_query }}
-  </p>
-  <p>
-    Ordering Expert: {{ interaction.expert_answer }}
-  </p>
+    <div id = "home" class="body-content">
+      <div class="split left">
+        <form method="POST" class="url-form">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button id="submit" type="button" class="save btn btn-default">Submit</button>
+        </form>
+        <p style="width:90%;">
+          {{ interaction.user_id }}: {{ interaction.user_query }}
+        </p>
+        <p style="width:90%;">
+          Ordering Expert: {{ interaction.expert_answer }}
+        </p>
+      </div>
+      <div class="split right">
+        <h2>Trace Console</h2>
+        <div class="scrollbox">
+          <p id="trace_console">placeholder</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.querySelector('#submit').onclick = function (e) {
+         const user_id = document.querySelector('#id_user_id').value;
+         const user_query = document.querySelector('#id_user_query').value;
+         webSocket.send(JSON.stringify({
+             'user_id': user_id,
+             'user_query': user_query,
+         }));
+         document.querySelector('#id_user_query').value = '';
+      };
+   
+      //Create a WebSocket in JavaScript.
+      const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/trace/');
+
+      webSocket.onmessage = function (e) {
+        var data = JSON.parse(event.data);
+        console.log(data);
+        document.querySelector('#trace_console').innerText += data.message;
+      }
+    </script>
 {% endblock %}
