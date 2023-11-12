@@ -1,6 +1,7 @@
 const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
 const msgerChat = get(".msger-chat");
+const msgrSendButton = get(".msger-send-btn")
 
 const BOT_MSGS = [
     "Hi, how are you?",
@@ -10,11 +11,16 @@ const BOT_MSGS = [
     "I feel sleepy! :("
 ];
 
-// Icons made by Freepik from www.flaticon.com
+const PERSON_IMGS = [
+    "/static/support_app/person_female.svg",
+    "/static/support_app/person_male.svg"
+]
+
+const selector = Math.round(Math.random());
+const PERSON_IMG = PERSON_IMGS[selector];
 const BOT_IMG = "/static/support_app/chatbot.gif";
-const PERSON_IMG = "/static/support_app/person_male.svg";
 const BOT_NAME = "AI Support";
-const PERSON_NAME = "Buyer";
+const PERSON_NAME = "Shopper";
 
 msgerForm.addEventListener("submit", event => {
     event.preventDefault();
@@ -24,8 +30,10 @@ msgerForm.addEventListener("submit", event => {
 
     appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
     msgerInput.value = "";
+    msgrSendButton.disabled = true
 
-    botResponse();
+    //botResponse();
+    botThinking();
 });
 
 function appendMessage(name, img, side, text) {
@@ -45,6 +53,28 @@ function appendMessage(name, img, side, text) {
     </div>
     `;
 
+    msgerChat.insertAdjacentHTML("beforeend", msgHTML);
+    msgerChat.scrollTop += 500;
+}
+
+function botThinking() {
+    const msgHTML = `
+        <div class="msg left-msg">
+            <div class="msg-img" style="background-image: url(${BOT_IMG})"></div>
+
+            <div class="msg-bubble">
+                <div class="msg-info">
+                    <div class="msg-info-name">${BOT_NAME}</div>
+                    <div class="msg-info-time">${formatDate(new Date())}</div>
+                </div>
+                <div class="typing">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div> 
+            </div>
+        </div>
+        `; 
     msgerChat.insertAdjacentHTML("beforeend", msgHTML);
     msgerChat.scrollTop += 500;
 }
@@ -86,7 +116,7 @@ document.getElementById("profile_dropdown").addEventListener("click",()=>{
     document.getElementsByClassName("profilre_dropdown")[0].classList.toggle("toggle_profile_dropdown")
 })
 
-document.querySelector('#submit').onclick = function (e) {
+/*document.querySelector('#submit').onclick = function (e) {
     const user_id = document.querySelector('#id_user_id').value;
     const user_query = document.querySelector('#id_user_query').value;
     webSocket.send(JSON.stringify({
@@ -94,10 +124,10 @@ document.querySelector('#submit').onclick = function (e) {
         'user_query': user_query,
     }));
     document.querySelector('#id_user_query').value = '';
-};
+};*/
 
 //Create a WebSocket in JavaScript.
-//const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/trace/');
+const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/trace/');
 
 webSocket.onmessage = function (e) {
     var data = JSON.parse(event.data);
