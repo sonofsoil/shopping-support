@@ -6,3 +6,5 @@ support_app/migrations/
 support_webapp/__pycache__/
 static_collected/
 support_webapp/__init__.py
+support_app/.DS_Store
+support_app/static/.DS_Store
