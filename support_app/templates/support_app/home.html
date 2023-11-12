@@ -3,65 +3,189 @@
   Home
 {% endblock %}
 {% block content %}
-    <div id = "home" class="body-content">
-      <div class="split left">
-        <form method="POST" class="url-form">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button id="submit" type="button" class="save btn btn-default">Submit</button>
-        </form>
-        <p style="width:90%;">
-          {{ interaction.user_id }}: {{ interaction.user_query }}
-        </p>
-        <p id = "expert_answer" style="width:90%;">
-          Ordering Expert: {{ interaction.expert_answer }}
-        </p>
-      </div>
-      <div class="split right">
-        <h2>Trace Console</h2>
-        <div class="scrollbox">
-          <p id="trace_console"></p>
-        </div>
-      </div>
-    </div>
-    <script>
-      document.querySelector('#submit').onclick = function (e) {
-         const user_id = document.querySelector('#id_user_id').value;
-         const user_query = document.querySelector('#id_user_query').value;
-         webSocket.send(JSON.stringify({
-             'user_id': user_id,
-             'user_query': user_query,
-         }));
-         document.querySelector('#id_user_query').value = '';
-      };
-   
-      //Create a WebSocket in JavaScript.
-      const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/trace/');
+  <div id = "home" class="body-content">
+    <div class="split left">
+      <section class="msger">
+        <header class="msger-header">
+          <div class="msger-header-title">
+            <i class="fas fa-comment-alt"></i> Shopping Support Window
+          </div>
+          <div class="msger-header-options">
+            <span><i class="fas fa-cog"></i></span>
+          </div>
+        </header>
 
-      webSocket.onmessage = function (e) {
-        var data = JSON.parse(event.data);
-        switch(data.type) {
-          case "Trace":
-            console.log(data.message)
-            switch(data.message.type) {
-              case "Thought":
-                document.querySelector('#trace_console').innerText += data.message.thought;
-                document.querySelector('#trace_console').innerText += data.message.action;
-                document.querySelector('#trace_console').innerText += data.message.actionInput;
-                break;
-              case "Tool":
-                document.querySelector('#trace_console').innerText += data.message.message;
-                break;
-              case "Answer":
-                document.querySelector('#trace_console').innerText += data.message.thought;
-                document.querySelector('#trace_console').innerText += data.message.answer;
-                break;
-            }
-            break;
-          case "Answer":
-            document.querySelector('#expert_answer').innerText = data.message;
-            break;
-        }
+        <main class="msger-chat">
+          <div class="msg left-msg">
+            <div
+            class="msg-img"
+            style="background-image: url('/static/support_app/chatbot.gif')"
+            ></div>
+
+            <div class="msg-bubble">
+              <div class="msg-info">
+                <div class="msg-info-name">AI Support</div>
+                <div class="msg-info-time">12:45</div>
+              </div>
+
+              <div class="msg-text">
+                Welcome to Shopping Support! I'm an AI Agent dealing with ordering related queries.
+                How can I help you? 😄
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <form class="msger-inputarea">
+          <input type="text" class="msger-input" placeholder="Enter your message...">
+          <button type="submit" class="msger-send-btn">Send</button>
+        </form>
+      </section>
+    </div>
+    <div class="split right">
+      <section class="msger">
+        <header class="msger-header">
+          <div class="msger-header-title">
+            <i class="fas fa-comment-alt"></i> Agent Trace Console
+          </div>
+        </header>
+        <div class="console" id="trace_console">
+          <pre><code>
+            <span class="debug">{"a":"foo","b":"bar"}</span>
+            <span class="info">Many messages, such logging, wow!</span>
+            <span class="warn">Warning, warning!</span>
+            <span class="error">Oh noes, y u do dis?</span>
+          </code></pre>
+        </div>
+      </section>
+    </div>
+  </div> 
+  <script>
+    const msgerForm = get(".msger-inputarea");
+    const msgerInput = get(".msger-input");
+    const msgerChat = get(".msger-chat");
+
+    const BOT_MSGS = [
+      "Hi, how are you?",
+      "Ohh... I can't understand what you trying to say. Sorry!",
+      "I like to play games... But I don't know how to play!",
+      "Sorry if my answers are not relevant. :))",
+      "I feel sleepy! :("
+    ];
+
+    // Icons made by Freepik from www.flaticon.com
+    const BOT_IMG = "/static/support_app/chatbot.gif";
+    const PERSON_IMG = "/static/support_app/person_male.svg";
+    const BOT_NAME = "AI Support";
+    const PERSON_NAME = "Buyer";
+
+    msgerForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const msgText = msgerInput.value;
+      if (!msgText) return;
+
+      appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
+      msgerInput.value = "";
+
+      botResponse();
+    });
+
+    function appendMessage(name, img, side, text) {
+      //   Simple solution for small apps
+      const msgHTML = `
+        <div class="msg ${side}-msg">
+          <div class="msg-img" style="background-image: url(${img})"></div>
+
+          <div class="msg-bubble">
+            <div class="msg-info">
+              <div class="msg-info-name">${name}</div>
+              <div class="msg-info-time">${formatDate(new Date())}</div>
+            </div>
+
+            <div class="msg-text">${text}</div>
+          </div>
+        </div>
+      `;
+
+      msgerChat.insertAdjacentHTML("beforeend", msgHTML);
+      msgerChat.scrollTop += 500;
+    }
+
+    function botResponse() {
+      const r = random(0, BOT_MSGS.length - 1);
+      const msgText = BOT_MSGS[r];
+      const delay = msgText.split(" ").length * 100;
+
+      setTimeout(() => {
+        appendMessage(BOT_NAME, BOT_IMG, "left", msgText);
+      }, delay);
+    }
+
+    // Utils
+    function get(selector, root = document) {
+      return root.querySelector(selector);
+    }
+
+    function formatDate(date) {
+      const h = "0" + date.getHours();
+      const m = "0" + date.getMinutes();
+
+      return `${h.slice(-2)}:${m.slice(-2)}`;
+    }
+
+    function random(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    Array.from(document.getElementsByClassName("showbtn")).map((btn) => {
+        btn.addEventListener("click", () => {
+            console.log("click")
+            document.getElementById("sidemenu").classList.toggle("show")
+        })
+    })
+
+    document.getElementById("profile_dropdown").addEventListener("click",()=>{
+        document.getElementsByClassName("profilre_dropdown")[0].classList.toggle("toggle_profile_dropdown")
+    })
+
+    document.querySelector('#submit').onclick = function (e) {
+        const user_id = document.querySelector('#id_user_id').value;
+        const user_query = document.querySelector('#id_user_query').value;
+        webSocket.send(JSON.stringify({
+            'user_id': user_id,
+            'user_query': user_query,
+        }));
+        document.querySelector('#id_user_query').value = '';
+    };
+
+    //Create a WebSocket in JavaScript.
+    //const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/trace/');
+
+    webSocket.onmessage = function (e) {
+      var data = JSON.parse(event.data);
+      switch(data.type) {
+        case "Trace":
+          console.log(data.message)
+          switch(data.message.type) {
+            case "Thought":
+              document.querySelector('#trace_console').innerText += data.message.thought;
+              document.querySelector('#trace_console').innerText += data.message.action;
+              document.querySelector('#trace_console').innerText += data.message.actionInput;
+              break;
+            case "Tool":
+              document.querySelector('#trace_console').innerText += data.message.message;
+              break;
+            case "Answer":
+              document.querySelector('#trace_console').innerText += data.message.thought;
+              document.querySelector('#trace_console').innerText += data.message.answer;
+              break;
+          }
+          break;
+        case "Answer":
+          document.querySelector('#expert_answer').innerText = data.message;
+          break;
       }
-    </script>
+    }
+  </script>
 {% endblock %}

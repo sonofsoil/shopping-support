@@ -6,15 +6,113 @@
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'support_app/app.css' %}"/>
     </head>
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.3.1/css/all.min.css" rel="stylesheet">
     <body>
-        <div class="navbar">
-            <a href="{% url 'home' %}" class="navbar-brand">Home</a>
-            <a href="{% url 'tools' %}" class="navbar-item">Tools</a>
-            <a href="{% url 'orders' %}" class="navbar-item">Orders</a>
-            <a href="{% url 'about' %}" class="navbar-item">About</a>
-            <a href="{% url 'contact' %}" class="navbar-item">Contact</a>
-        </div>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <section class="nav__side">
+            <nav>
+                <div class="barand"><img src="https://i.postimg.cc/FH1Qcjqg/whiteamazon.png" alt=""></div>
+                <div class="searchbar">
+                    <input type="text">
+                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="links">
+                    <div class="bell">
+                        <i class="fa-solid fa-bell"></i>
+                    <span>3</span>
+                    </div>
+                    <div class="cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span>5</span>
+                    </div>
+                    <div class="user" id="profile_dropdown">
+                        <i class="fa-regular fa-circle-user"></i>
+                    </div>
+                </div>
+                <div class="profilre_dropdown">
+                    <ul>
+                        <li><a href="#">My Profile</a></li>
+                        <li><a href="#">Sign in</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="nav2">
+                <div class="menu showbtn">
+                    <i class="fa-solid fa-bars "></i>
+                    <span>All</span>
+                </div>
+                <div>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'tools' %}">Tools</a></li>
+                        <li><a href="{% url 'orders' %}">Orders</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="#">New Release</a></li>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">Prime</a></li>
+                    </ul>
+                </div>
+                <div class="downloadApp">
+                    <a href="#"> Shoping Make Easy | Download the app</a>
+                </div>
+            </div>
+            <div class="sidebar" id="sidemenu">
+                <div class="top">
+                    <div><i class="fa-regular fa-circle-user"></i>
+                        <span>Hello, sign in</span>
+                    </div>
+                    <div> <button class="showbtn"><i class="fa-solid fa-xmark"></i></button></div>
+                </div>
+                <ul>
+                    <li>
+                        <div class="title">Trending</div>
+                    </li>
+                    <li><a href="#">Best Seller</a></li>
+                    <li><a href="#">New Release</a></li>
+                    <li><a href="#">Movers and Shakers</a></li>
+                </ul>
+                <hr>
+                <ul>
+                    <li>
+                        <div class="title">Digital contetn And Divices</div>
+                    </li>
+                    <li><a href="#">Best Seller</a></li>
+                    <li><a href="#">New Release</a></li>
+                    <li><a href="#">Movers and Shakers</a></li>
+                </ul>
+                <hr>
+                <ul>
+                    <li>
+                        <div class="title">Shop by category</div>
+                    </li>
+                    <li><a href="#">Best Seller</a></li>
+                    <li><a href="#">New Release</a></li>
+                    <li><a href="#">Movers and Shakers</a></li>
+                </ul>
+                <hr>
+                <ul>
+                    <li>
+                        <div class="title">Programs & Features</div>
+                    </li>
+                    <li><a href="#">Best Seller</a></li>
+                    <li><a href="#">New Release</a></li>
+                    <li><a href="#">Movers and Shakers</a></li>
+                </ul>
+                <hr>
+                <ul>
+                    <li>
+                        <div class="title">Help & settings</div>
+                    </li>
+                    <li><a href="#">Best Seller</a></li>
+                    <li><a href="#">New Release</a></li>
+                    <li><a href="#">Movers and Shakers</a></li>
+                </ul>
+            </div>
+        </section>
 
         <div class="body-content">
             {% block content %}
