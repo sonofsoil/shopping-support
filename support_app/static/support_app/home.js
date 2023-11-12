@@ -32,9 +32,17 @@ msgerForm.addEventListener("submit", event => {
     msgerInput.value = "";
     msgrSendButton.disabled = true
 
-    //botResponse();
     botThinking();
+    sleep(5000).then(() => {
+        document.getElementById("bot-thinking").outerHTML = ""
+        botResponse();
+        msgrSendButton.disabled = false
+    });
 });
+
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 function appendMessage(name, img, side, text) {
     //   Simple solution for small apps
@@ -59,7 +67,7 @@ function appendMessage(name, img, side, text) {
 
 function botThinking() {
     const msgHTML = `
-        <div class="msg left-msg">
+        <div class="msg left-msg" id="bot-thinking">
             <div class="msg-img" style="background-image: url(${BOT_IMG})"></div>
 
             <div class="msg-bubble">
@@ -85,7 +93,7 @@ function botResponse() {
     const delay = msgText.split(" ").length * 100;
 
     setTimeout(() => {
-    appendMessage(BOT_NAME, BOT_IMG, "left", msgText);
+        appendMessage(BOT_NAME, BOT_IMG, "left", msgText);
     }, delay);
 }
 
