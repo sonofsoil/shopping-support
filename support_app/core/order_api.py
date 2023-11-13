@@ -13,7 +13,7 @@ def fetch_orders(user_id: str) -> dict:
     two_days_from_now = now + timedelta(days=2, hours=3)
     ten_days_from_now = now + timedelta(days=10)
     yesterday = now - timedelta(days=1)
-    if user_id == 'HappyUser' :
+    if user_id == 'Shopper' :
         return [{
             'delivery_date' : f'{two_days_from_now.strftime("%B %d, %Y")}',
             'order_status' : 'shipped',
@@ -53,6 +53,6 @@ def cancel_order(userId: str, orderId: str) -> bool:
     :return: True if order canclled successfully, false otherwise
     """
     print(f"userId: {userId} orderId - {orderId}")
-    if 'HappyUser' == userId:
+    if 'Shopper' == userId:
         return f'order {orderId} was successfully canceled for user {userId}'
     return f'failed to cancel order {orderId} for user {userId}'

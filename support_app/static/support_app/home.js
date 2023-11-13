@@ -4,14 +4,6 @@ const msgerChat = get(".msger-chat");
 const msgrSendButton = get(".msger-send-btn")
 const agentConsole = get(".console")
 
-const BOT_MSGS = [
-    "Hi, how are you?",
-    "Ohh... I can't understand what you trying to say. Sorry!",
-    "I like to play games... But I don't know how to play!",
-    "Sorry if my answers are not relevant. :))",
-    "I feel sleepy! :("
-];
-
 const PERSON_IMGS = [
     "/static/support_app/person_female.svg",
     "/static/support_app/person_male.svg"
@@ -23,8 +15,54 @@ const BOT_IMG = "/static/support_app/chatbot.gif";
 const BOT_NAME = "AI Support";
 const PERSON_NAME = "Shopper";
 
+// Set current time
 document.getElementById("bot-welcome-time").innerText = formatDate(new Date())
 
+// Add left pen show menu
+Array.from(document.getElementsByClassName("showbtn")).map((btn) => {
+    btn.addEventListener("click", () => {
+        document.getElementById("sidemenu").classList.toggle("show")
+    })
+})
+
+// Add user profile dropdown
+document.getElementById("profile_dropdown").addEventListener("click",()=>{
+    document.getElementsByClassName("profilre_dropdown")[0].classList.toggle("toggle_profile_dropdown")
+})
+
+// Create a WebSocket in JavaScript.
+const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/trace/');
+// Add web socket handler
+webSocket.onmessage = function (event) {
+    var data = JSON.parse(event.data);
+    switch(data.type) {
+    case "Trace":
+        console.log(data.message)
+        switch(data.message.type) {
+        case "Thought":
+            text = data.message.thought;
+            text += "<br><b>Action:</b> " + data.message.action;
+            text += "<br><b>Action Input:</b> " + data.message.actionInput;
+            appendConsoleMessage(data.message.type, text);
+            break;
+        case "Tool":
+            text = data.message.message;
+            appendConsoleMessage(data.message.type, text);
+            break;
+        case "Answer":
+            text = data.message.thought;
+            text += "<br><b>Answer:</b> " + data.message.answer;
+            appendConsoleMessage(data.message.type, text);
+            break;
+        }
+        break;
+    case "Answer":
+        botResponse(data.message);
+        break;
+    }
+}
+
+// Add query submit listener
 msgerForm.addEventListener("submit", event => {
     event.preventDefault();
 
@@ -33,19 +71,13 @@ msgerForm.addEventListener("submit", event => {
 
     appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
     msgerInput.value = "";
-    msgrSendButton.disabled = true
 
+    // disable further query
+    msgrSendButton.disabled = true
+    // start thinking
     botThinking();
-    sleep(5000).then(() => {
-        document.getElementById("bot-thinking").outerHTML = ""
-        botResponse();
-        text = "x"
-        for (i=0; i < 1000; i++) {
-            text += "x "
-        }
-        appendConsoleMessage("Thought", text)
-        msgrSendButton.disabled = false
-    });
+    // send query to server
+    sendQuery(PERSON_NAME, msgText);
 });
 
 function sleep (time) {
@@ -95,13 +127,12 @@ function botThinking() {
     msgerChat.scrollTop += 500;
 }
 
-function botResponse() {
-    const r = random(0, BOT_MSGS.length - 1);
-    const msgText = BOT_MSGS[r];
-    const delay = msgText.split(" ").length * 100;
-
+function botResponse(text) {
+    const delay = text.split(" ").length * 100;
     setTimeout(() => {
-        appendMessage(BOT_NAME, BOT_IMG, "left", msgText);
+        document.getElementById("bot-thinking").outerHTML = ""
+        appendMessage(BOT_NAME, BOT_IMG, "left", text);
+        msgrSendButton.disabled = false
     }, delay);
 }
 
@@ -133,51 +164,9 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-Array.from(document.getElementsByClassName("showbtn")).map((btn) => {
-    btn.addEventListener("click", () => {
-        document.getElementById("sidemenu").classList.toggle("show")
-    })
-})
-
-document.getElementById("profile_dropdown").addEventListener("click",()=>{
-    document.getElementsByClassName("profilre_dropdown")[0].classList.toggle("toggle_profile_dropdown")
-})
-
-/*document.querySelector('#submit').onclick = function (e) {
-    const user_id = document.querySelector('#id_user_id').value;
-    const user_query = document.querySelector('#id_user_query').value;
+function sendQuery(user, queryText) {
     webSocket.send(JSON.stringify({
-        'user_id': user_id,
-        'user_query': user_query,
+        'user_id': user,
+        'user_query': queryText,
     }));
-    document.querySelector('#id_user_query').value = '';
-};*/
-
-//Create a WebSocket in JavaScript.
-const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/trace/');
-
-webSocket.onmessage = function (event) {
-    var data = JSON.parse(event.data);
-    switch(data.type) {
-    case "Trace":
-        console.log(data.message)
-        switch(data.message.type) {
-        case "Thought":
-            document.querySelector('#trace_console').innerText += data.message.thought;
-            document.querySelector('#trace_console').innerText += data.message.action;
-            document.querySelector('#trace_console').innerText += data.message.actionInput;
-            break;
-        case "Tool":
-            document.querySelector('#trace_console').innerText += data.message.message;
-            break;
-        case "Answer":
-            document.querySelector('#trace_console').innerText += data.message.thought;
-            document.querySelector('#trace_console').innerText += data.message.answer;
-            break;
-        }
-        break;
-    case "Answer":
-        document.querySelector('#expert_answer').innerText = data.message;
-        break;
-    }
 }
