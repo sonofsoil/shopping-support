@@ -25,7 +25,7 @@
             <div class="msg-bubble">
               <div class="msg-info">
                 <div class="msg-info-name">AI Support</div>
-                <div class="msg-info-time">12:45</div>
+                <div class="msg-info-time" id="bot-welcome-time">12:45</div>
               </div>
 
               <div class="msg-text">
@@ -43,21 +43,11 @@
       </section>
     </div>
     <div class="split right">
-      <section class="msger">
-        <header class="msger-header">
-          <div class="msger-header-title">
-            <i class="fas fa-comment-alt"></i> Agent Trace Console
-          </div>
-        </header>
-        <div class="console" id="trace_console">
-          <pre>
-            <p class="debug">{"a":"foo","b":"bar"}</p>
-            <p class="info">Many messages, such logging, wow!</p>
-            <p class="warn">Warning, warning!</p>
-            <p class="error">Oh noes, y u do dis?</p>
-          </pre>
-        </div>
-      </section>
+      <div class="console" id="trace_console">
+        <pre>
+          <p class="stats"><b></b>--------------------------------------<br>    A G E N T     C O N S O L E<br>--------------------------------------</b></p>
+        </pre>
+      </div>
     </div>
   </div>
   {% load static %}

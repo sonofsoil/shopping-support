@@ -22,6 +22,8 @@ const BOT_IMG = "/static/support_app/chatbot.gif";
 const BOT_NAME = "AI Support";
 const PERSON_NAME = "Shopper";
 
+document.getElementById("bot-welcome-time").innerText = formatDate(new Date())
+
 msgerForm.addEventListener("submit", event => {
     event.preventDefault();
 
@@ -115,7 +117,6 @@ function random(min, max) {
 
 Array.from(document.getElementsByClassName("showbtn")).map((btn) => {
     btn.addEventListener("click", () => {
-        console.log("click")
         document.getElementById("sidemenu").classList.toggle("show")
     })
 })
