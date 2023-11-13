@@ -2,6 +2,7 @@ const msgerForm = get(".msger-inputarea");
 const msgerInput = get(".msger-input");
 const msgerChat = get(".msger-chat");
 const msgrSendButton = get(".msger-send-btn")
+const agentConsole = get(".console")
 
 const BOT_MSGS = [
     "Hi, how are you?",
@@ -38,6 +39,11 @@ msgerForm.addEventListener("submit", event => {
     sleep(5000).then(() => {
         document.getElementById("bot-thinking").outerHTML = ""
         botResponse();
+        text = "x"
+        for (i=0; i < 1000; i++) {
+            text += "x "
+        }
+        appendConsoleMessage("Thought", text)
         msgrSendButton.disabled = false
     });
 });
@@ -99,6 +105,18 @@ function botResponse() {
     }, delay);
 }
 
+function appendConsoleMessage(type, text) {
+
+    const msgHTML = `
+    <p class="${type.toLowerCase()}">
+        <b>${type}:</b> ${text}
+    </p>
+    `;
+
+    agentConsole.insertAdjacentHTML("beforeend", msgHTML);
+    agentConsole.scrollTop += 500;
+}
+
 // Utils
 function get(selector, root = document) {
     return root.querySelector(selector);
@@ -138,7 +156,7 @@ document.getElementById("profile_dropdown").addEventListener("click",()=>{
 //Create a WebSocket in JavaScript.
 const webSocket = new WebSocket('ws://127.0.0.1:8000/ws/trace/');
 
-webSocket.onmessage = function (e) {
+webSocket.onmessage = function (event) {
     var data = JSON.parse(event.data);
     switch(data.type) {
     case "Trace":
