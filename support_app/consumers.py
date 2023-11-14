@@ -3,15 +3,17 @@ from time import sleep
 from random import randint
 from threading import Thread
 from channels.generic.websocket import WebsocketConsumer
-from support_app.core.event_tracer import EventTracer
+from support_app.core.event_tracer import EventTracer, StatsCollector
 from support_app.core.user_interaction import UserInteraction
 
 class QueryWebSocketConsumer(WebsocketConsumer):
     tracer = None
+    stats_collector = None
 
     def connect(self):
         self.accept()
         self.tracer = EventTracer()
+        self.stats_collector = StatsCollector()
         event_pusher = EventPusher(consumer=self, tracer=self.tracer)
         event_pusher.start()
 
@@ -25,12 +27,16 @@ class QueryWebSocketConsumer(WebsocketConsumer):
         user_query = query_data_json["user_query"]
         user_interaction = UserInteraction(user=user_id,
                                            uquery=user_query)
-        expert_answer = user_interaction.get_answer(tracer=self.tracer)
+        expert_answer = user_interaction.get_answer(
+            tracer=self.tracer,
+            stats_collector=self.stats_collector)
         message = {
                 'type' : 'Answer',
                 'message': f"{expert_answer}"
             }
         self.send(json.dumps(message))
+        stats = self.stats_collector.collectReset()
+        self.send(json.dumps({'type': 'Stats', 'message' : stats}))
 
 class EventPusher(Thread) :
 

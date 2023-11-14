@@ -43,21 +43,25 @@ webSocket.onmessage = function (event) {
             text = data.message.thought;
             text += "<br><b>Action:</b> " + data.message.action;
             text += "<br><b>Action Input:</b> " + data.message.actionInput;
-            appendConsoleMessage(data.message.type, text);
+            appendConsoleMessage(data.message.type, data.message.type, text);
             break;
         case "Tool":
             text = data.message.message;
-            appendConsoleMessage(data.message.type, text);
+            appendConsoleMessage(data.message.type, data.message.type, text);
             break;
         case "Answer":
             text = data.message.thought;
             text += "<br><b>Answer:</b> " + data.message.answer;
-            appendConsoleMessage(data.message.type, text);
+            appendConsoleMessage(data.message.type, 'Thought', text);
             break;
         }
         break;
     case "Answer":
         botResponse(data.message);
+        break;
+    case "Stats":
+        text = data.message;
+        appendConsoleMessage(data.type, data.type, JSON.stringify(text,null,2));
         break;
     }
 }
@@ -136,11 +140,11 @@ function botResponse(text) {
     }, delay);
 }
 
-function appendConsoleMessage(type, text) {
+function appendConsoleMessage(type, trait, text) {
 
     const msgHTML = `
     <p class="${type.toLowerCase()}">
-        <b>${type}:</b> ${text}
+        <b>${trait}:</b> ${text}
     </p>
     `;
 

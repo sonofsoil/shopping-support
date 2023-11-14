@@ -1,11 +1,8 @@
-import json
+import time
 from queue import Queue, Empty
-from typing import Dict, Union, Any, List
+from typing import Dict, Any, List
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import AgentAction, AgentFinish
-from langchain.agents import AgentType, initialize_agent, load_tools
-from langchain.callbacks import tracing_enabled
-from langchain.llms import OpenAI
 from langchain.schema.output import LLMResult
 
 class EventTracer(BaseCallbackHandler):
@@ -75,20 +72,72 @@ class EventTracer(BaseCallbackHandler):
             pass
         return message
 
-class LLMTracer(BaseCallbackHandler) :
+class StatsCollector(BaseCallbackHandler) :
 
     def __init__(self) :
-        super(LLMTracer, self).__init__()
-        self.traceQueue = Queue(maxsize=10000)
+        super(StatsCollector, self).__init__()
+        self.agentProcessingTime = 0.0
+        self.llmCallTimeList = []
+        self.toolCallTimeList = []
+        self.agentStartTime = 0.0
+        self.toolStartTime = 0.0
+        self.llmStartTime = 0.0
 
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
     ) -> Any:
-        #self.traceQueue.put_nowait(f"<p><b>LLM</b>: Invoking {serialized['name']}")
-        pass
+        self.llmStartTime = time.time()
     
     def on_llm_end(
         self, response : LLMResult, **kwargs: Any
     ) -> Any:
-        #self.traceQueue.put_nowait(f"<p><b>LLM</b>: Invoking {serialized['name']}")
-        pass
+        self.llmCallTimeList.append(time.time() - self.llmStartTime)
+    
+    def on_tool_start(
+        self, serialized: Dict[str, Any], input_str: str, **kwargs: Any
+    ) -> Any:
+        self.toolStartTime = time.time()
+
+    def on_tool_end(
+        self, output : str, **kwargs: Any
+    ) -> Any:
+        self.toolCallTimeList.append(time.time() - self.toolStartTime)
+    
+    def on_chain_start(
+        self, serialized: Dict[str, Any], inputs: Dict[str, Any], **kwargs: Any
+    ) -> Any:
+        if self.agentStartTime <= 0.0 :
+            self.agentStartTime = time.time()
+
+    def on_chain_end(
+        self, outputs: Dict[str, Any], **kwargs: Any
+    ) -> Any:
+        self.agentProcessingTime = time.time() - self.agentStartTime
+
+    def collectReset(self) :
+        total_llm_time = 0.0
+        for e in self.llmCallTimeList:
+            total_llm_time += e
+        
+        total_tool_time = 0.0
+        for t in self.toolCallTimeList:
+            total_tool_time += t
+
+        stats = {
+            'llm_call_count': len(self.llmCallTimeList),
+            'llm_time_spent': f"{round(total_llm_time, 2)} sec",
+            'tool_call_count': len(self.toolCallTimeList),
+            'tool_time_spent': f"{round(total_tool_time, 2)} sec",
+            'agent_answer_time': f"{round(self.agentProcessingTime, 2)} sec",
+        }
+
+        # reset
+        self.agentProcessingTime = 0.0
+        self.llmCallTimeList = []
+        self.toolCallTimeList = []
+        self.agentStartTime = 0.0
+        self.toolStartTime = 0.0
+        self.llmStartTime = 0.0
+
+        # return
+        return stats
