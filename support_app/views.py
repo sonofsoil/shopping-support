@@ -4,7 +4,7 @@ from support_app.core.order_api import fetch_orders
 from support_app.models import OrderQuery, OrderDetails
 from support_app.forms import OrderQueryForm, OrderDetailsForm
 from support_app.core.user_interaction import UserInteraction
-from support_app.core.order_query_tools import SupportTools
+from support_app.core.tool_registry import SupportTools
 
 """
 def home(request):
@@ -67,6 +67,3 @@ def tools(request):
 
 def about(request):
     return render(request, "support_app/about.html")
-
-def contact(request):
-    return render(request, "support_app/contact.html")

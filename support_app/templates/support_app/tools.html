@@ -1,21 +1,35 @@
 {% extends "support_app/layout.html" %}
 {% block title %}
-  List of Tools is use :
+  AI Tool Registry
 {% endblock %}
 {% block content %}
+  <div class="w3-container">
+    <h2><b>AI Tool Registry</b></h2>
+  </div>
   <table class="table">
+    <colgroup>
+      <col class="tool-columns">
+      <col class="tool-columns">
+      <col class="tool-columns">
+      <col class="tool-columns">
+      <col>
+    </colgroup>
     <thead>
         <tr>
-            <th>Name</th>
             <th>Type</th>
+            <th>Trait</th>
+            <th>Domain</th>
+            <th>Name</th>
             <th>Description</th>
         </tr>
     </thead>
     <tbody>
         {% for tool in tools %}
             <tr>
-                <td>{{tool.name}}</td>
-                <td>{{tool.type}}</td>
+              <td><img src="{{tool.typeImg}}" alt="" width="30" height="30">{{tool.type}}</td>
+              <td><img src="{{tool.traitImg}}" alt="" width="30" height="30">{{tool.trait}}</td>
+              <td><img src="{{tool.domainImg}}" alt="" width="30" height="30">{{tool.domain}}</td>
+              <td>{{tool.name}}</td>
                 <td>{{tool.description}}</td>
             </tr>
         {% endfor %}

@@ -3,16 +3,21 @@
   What are you buying
 {% endblock %}
 {% block content %}
-  <form method="POST" class="url-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">Submit</button>
-  </form>
   <div>
-    <h3>
-        List of orders:
-    </h3>
+    <div class="w3-container">
+      <h2><b>Shopper's Order List (7 days)</b></h2>
+    </div>
     <table class="table">
+      <colgroup>
+        <col class="order-columns">
+        <col class="order-columns">
+        <col class="order-columns">
+        <col class="order-columns">
+        <col class="order-columns">
+        <col class="order-columns">
+        <col class="order-columns">
+        <col>
+      </colgroup>
         <thead>
             <tr>
                 <th>Order ID</th>

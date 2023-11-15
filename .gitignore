@@ -8,3 +8,5 @@ static_collected/
 support_webapp/__init__.py
 support_app/.DS_Store
 support_app/static/.DS_Store
+.DS_Store
+support_app/static/support_app/.DS_Store

@@ -3,7 +3,7 @@ from langchain.agents import initialize_agent
 from langchain.agents import AgentType
 from langchain.llms import OpenAI
 from support_app.core.prompt_templates import order_query_prompt_str
-from support_app.core.order_query_tools import SupportTools
+from support_app.core.tool_registry import SupportTools
 from langchain.prompts import PromptTemplate
 from datetime import datetime
 import langchain
