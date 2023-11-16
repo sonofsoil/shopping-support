@@ -942,3 +942,11 @@ h2 {
 	font-size: 16px;
 	line-height: 25px;
 }
+
+.textPara {
+  text-align:justify;
+  text-justify:auto;
+  color: burlywood;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
