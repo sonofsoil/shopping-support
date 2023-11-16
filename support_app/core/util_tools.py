@@ -36,3 +36,13 @@ def query_vector_db(entity : str) -> list[str] :
     :return: list of similar entities
     """
     pass
+
+def text_to_sql(nl_query : str) -> str :
+    """Returns a SQL query translated from a natural language query.
+    The return query is a valid SQL query to be subsequently executed
+    by the caller.
+
+    :param nl_query: query to a database in natural language
+    :return: valid SQL query for execution
+    """
+    pass

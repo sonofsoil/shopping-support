@@ -7,7 +7,8 @@ from support_app.core.util_tools import (
     search_web,
     send_email,
     query_product_catalog,
-    query_vector_db
+    query_vector_db,
+    text_to_sql,
 )
 
 class SupportTool() :
@@ -53,6 +54,13 @@ class SupportTools() :
                                       trait='Expert',
                                       traitImg='/static/support_app/expert_icon.png',
                                       tool=StructuredTool.from_function(identify_relevant_order)))
+        self.tools.append(SupportTool(type='Retriever',
+                                      typeImg='/static/support_app/retriever_icon.png',
+                                      domain='AWS',
+                                      domainImg='/static/support_app/aws_icon.svg',
+                                      trait='Expert',
+                                      traitImg='/static/support_app/expert_icon.png',
+                                      tool=StructuredTool.from_function(text_to_sql)))
         self.tools.append(SupportTool(type='Retriever',
                                       typeImg='/static/support_app/retriever_icon.png',
                                       domain='Amazon',

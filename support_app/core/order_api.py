@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-def fetch_orders(user_id: str) -> dict:
+def fetch_orders(user_id: str = "Shopper") -> dict:
     """ Fetches the existing orders for the user. If no order found
     for the user, returns empty list.
     :param user_id: user identifier

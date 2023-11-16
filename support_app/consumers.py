@@ -1,6 +1,5 @@
 import json
 from time import sleep
-from random import randint
 from threading import Thread
 from channels.generic.websocket import WebsocketConsumer
 from support_app.core.event_tracer import EventTracer, StatsCollector

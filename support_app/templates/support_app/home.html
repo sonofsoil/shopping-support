@@ -1,53 +1,39 @@
 {% extends "support_app/layout.html" %}
 {% block title %}
-  Home
+About Us
 {% endblock %}
 {% block content %}
-  <div id = "home" class="body-content">
-    <div class="split left">
-      <section class="msger">
-        <header class="msger-header">
-          <div class="msger-header-title">
-            <i class="fas fa-comment-alt"></i> Shopping Support Window
-          </div>
-          <div class="msger-header-options">
-            <span><i class="fas fa-cog"></i></span>
-          </div>
-        </header>
-
-        <main class="msger-chat">
-          <div class="msg left-msg">
-            <div
-            class="msg-img"
-            style="background-image: url('/static/support_app/chatbot.gif')"
-            ></div>
-
-            <div class="msg-bubble">
-              <div class="msg-info">
-                <div class="msg-info-name">AI Support</div>
-                <div class="msg-info-time" id="bot-welcome-time">12:45</div>
-              </div>
-
-              <div class="msg-text">
-                Welcome to Shopping Support! I'm an AI Agent dealing with ordering related queries.
-                How can I help you? 😄
-              </div>
-            </div>
-          </div>
-        </main>
-
-        <form class="msger-inputarea">
-          <input type="text" class="msger-input" placeholder="Enter your message...">
-          <button type="submit" class="msger-send-btn">Send</button>
-        </form>
-      </section>
-    </div>
-    <div class="split right">
-        <main class="console">
-          <p class="stats"><b></b>------------------------------------------<br>&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;I&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;G&nbsp;E&nbsp;N&nbsp;T&nbsp;&nbsp;&nbsp;&nbsp;C&nbsp;O&nbsp;N&nbsp;S&nbsp;O&nbsp;L&nbsp;E<br>------------------------------------------</b></p>
-        </main>
-    </div>
-  </div>
-  {% load static %}
-  <script type="text/javascript" src="{% static 'support_app/home.js' %}"></script>
+<div class="banner">
+	<div class="g-table">
+	    <div class="d-middle">
+		    <div class="container">
+			    <div class="banner-text">
+			    <h1>AI Agent Paradigm: Stacking experts to solve complex tasks</h1>
+			    <p class="textPara">
+                    We achieved significant progress in content classification, generation, summarization,
+                    expansion and Q&A in the field of Generative AI. The emergent <b>Agent</b> pattern where
+                    we assign a role to LLM and give it certain tools to perform complex tasks via multi-turn
+                    interaction makes Generative AI even more powerful. <b>Agent</b> paradigm makes the LLM
+                    reason and act(ReACT) based on the assigned role and tools in its disposal; the complex
+                    task is broken into smaller simpler tasks to achieve final outcome.
+               </p>
+               <p class="textPara">
+                    The <b>Agent</b> pattern is inherently composable as well. With the right abstraction of
+                    <b>Tool</b>, it is very much possible to wrap an <b>Agent</b> as a <b>Tool</b> and used
+                    by another <b>Agent</b>, the <b>Expert Tool</b>. That ability gives rise to various level
+                    of expertise and building higher-order <b>Agents</b> for more complex tasks. This is no
+                    different from microservice paradigm, where we built high-order API composing lower-order
+                    API.  
+               </p>
+                <p class="textPara">
+                    This is a small demo of a <b>Agent</b> functionality, its composability and reusability.
+                    We used OpenAI GPT-3.5-Turbo as our LLM and LangChang library for <b>Agent</b> implementation.
+                    We also show how an organization can build various level or expertise via <b>Tool</b>
+                    abstraction and associated registry.
+                </p>
+		    </div>
+		</div>
+	</div>
+</div>
+</div>
 {% endblock %}

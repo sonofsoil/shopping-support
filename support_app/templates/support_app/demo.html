@@ -1,0 +1,53 @@
+{% extends "support_app/layout.html" %}
+{% block title %}
+  Home
+{% endblock %}
+{% block content %}
+  <div id = "home" class="body-content">
+    <div class="split left">
+      <section class="msger">
+        <header class="msger-header">
+          <div class="msger-header-title">
+            <i class="fas fa-comment-alt"></i> Shopping Support Window
+          </div>
+          <div class="msger-header-options">
+            <span><i class="fas fa-cog"></i></span>
+          </div>
+        </header>
+
+        <main class="msger-chat">
+          <div class="msg left-msg">
+            <div
+            class="msg-img"
+            style="background-image: url('/static/support_app/chatbot.gif')"
+            ></div>
+
+            <div class="msg-bubble">
+              <div class="msg-info">
+                <div class="msg-info-name">AI Support</div>
+                <div class="msg-info-time" id="bot-welcome-time">12:45</div>
+              </div>
+
+              <div class="msg-text">
+                Welcome to Shopping Support! I'm an AI Agent dealing with ordering related queries.
+                How can I help you? 😄
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <form class="msger-inputarea">
+          <input type="text" class="msger-input" placeholder="Enter your message...">
+          <button type="submit" class="msger-send-btn">Send</button>
+        </form>
+      </section>
+    </div>
+    <div class="split right">
+        <main class="console">
+          <p class="stats"><b></b>------------------------------------------<br>&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;I&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;G&nbsp;E&nbsp;N&nbsp;T&nbsp;&nbsp;&nbsp;&nbsp;C&nbsp;O&nbsp;N&nbsp;S&nbsp;O&nbsp;L&nbsp;E<br>------------------------------------------</b></p>
+        </main>
+    </div>
+  </div>
+  {% load static %}
+  <script type="text/javascript" src="{% static 'support_app/home.js' %}"></script>
+{% endblock %}
