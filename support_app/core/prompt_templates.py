@@ -24,15 +24,15 @@ order_identifier_prompt_str = """
 """
 
 date_time_diff_prompt_str = """
-    You are a math expert. Given the delivery date and current
-    date, calculate the days and hours of delivery from today
-    by performing the date and time diff.
+    You are a math expert. Given the delivery date and current date,
+    calculate the days and hours of delivery from today by performing
+    the date and time diff.
     
-    Output a json object that contains the following keys:
+    Provide your repsponse in json format containing the following keys:
     days, hours
 
-    Current date: {current_date}
     Delivery date: {delivery_date}
+    Current date: {current_date}
 """
 
 order_cancellation_decision_prompt_str = """
