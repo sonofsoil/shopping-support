@@ -1,0 +1,28 @@
+Broad queries
+=============
+
+Tell me the delivery dates of my orders
+(Generates python code to extracts the delivery dates from all orders)
+
+Tell me all the orders which are not yet delivered
+(Here too, the expert 'identify_relevant_order' generates a python code which extracts the undelivered orders)
+
+Can you please check any of my orders delivered recently?
+(Here no python code, expert just returned the relevant order)
+
+Days to deliver query
+=====================
+How many days remaining to deliver my dishwasher cleaner?
+
+(Agent uses another expert tool derive_days_to_deliver to answer the user)
+
+No need to cancel
+=================
+How many days remaining to deliver my flower vase? if not delivering in next three days, please cancel
+(Now it uses one more expert tool decide_cancel_order to figure out if order needs to be canceled)
+
+Cancel the order
+================
+If my dishwasher cleaner is not delivering in next three days, please cancel the order
+(Here it needed to cancel the order and uses the API tool cancel_order) 
+
