@@ -52,7 +52,7 @@ webSocket.onmessage = function (event) {
         case "Answer":
             text = data.message.thought;
             text += "<br><b>Answer:</b> " + data.message.answer;
-            appendConsoleMessage(data.message.type, 'Thought', text);
+            appendConsoleMessage(data.message.type, 'Final Thought', text);
             break;
         }
         break;
