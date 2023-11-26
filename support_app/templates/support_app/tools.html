@@ -32,18 +32,18 @@
                 <svg xmlns="\http://www.w3.org/2000/svg&quot;" viewBox="0 0 80 80" focusable="false"><path d="M70.3 13.8L40 66.3 9.7 13.8z"></path></svg>
                 </button>
               </td>
-              <td><img src="{{tool.typeImg}}" alt="" width="50" height="50"></td>
+              <td><span title="{{tool.type}}"><img src="{{tool.typeImg}}" alt="" width="50" height="50"></span></td>
               <td align="left"><span class="tool-name"><b>{{tool.name}}</b></span></td>
-              <td><img src="{{tool.traitImg}}" alt="" width="50" height="50"></td>
-              <td><img src="{{tool.domainImg}}" alt="" width="50" height="50"></td>
+              <td><span title="{{tool.trait}}"><img src="{{tool.traitImg}}" alt="" width="50" height="50"></span></td>
+              <td><span title="{{tool.domain}}"><img src="{{tool.domainImg}}" alt="" width="50" height="50"></span></td>
               <td>{{tool.owner}}</td>
             </tr>
             </tr>
-            {% if tool.trait == "NLI" %}
+            {% if "NLI" in tool.trait %}
               <tr = class="hidden" id="{{tool.name}}-internal">
                 <td></td>
                 <td><b>LLM</b></td>
-                <td class="tool-name"><b>{{tool.llm}}</b></td>
+                <td class="llm-name"><b>{{tool.llm}}</b></td>
                 <td><b>Tools</b></td>
                 <td></td>
                 <td class="tool-name">
@@ -67,7 +67,7 @@
       function toggle(btnID, trait) {
         var theButton = document.getElementById(btnID);
         var theRows = [document.getElementById(btnID+'-details')];
-        if (trait === 'NLI') {
+        if (trait.includes("NLI")) {
           theRows.push(document.getElementById(btnID+'-internal'));
         }
         

@@ -949,6 +949,12 @@ h2 {
   font-family: "Lucida Console";
 }
 
+.llm-name {
+  text-transform: uppercase;
+  color: darkmagenta;
+  font-family: "Lucida Console";
+}
+
 .cell button {
   font-size: 60%;
   color: #000;

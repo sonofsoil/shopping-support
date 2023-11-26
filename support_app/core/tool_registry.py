@@ -6,10 +6,14 @@ from support_app.core.order_api import fetch_orders, cancel_order
 from support_app.core.util_tools import (
     search_web,
     send_email,
-    query_product_catalog,
+    product_support_agent,
     query_similar_entities,
     text_to_sql,
     order_support_agent,
+    search_products,
+    fetch_product_details,
+    buyer_support_agent,
+    buy_one_click,
 )
 
 class SupportTool() :
@@ -51,107 +55,115 @@ class SupportTools() :
     def __init__(self) -> None:
         self.tools = []
         fetch_orders_tool = StructuredTool.from_function(fetch_orders)
-        self.tools.append(SupportTool(type='Answer',
+        identify_relevant_order_tool = StructuredTool.from_function(identify_relevant_order)
+        text_to_sql_tool = StructuredTool.from_function(text_to_sql)
+        derive_days_to_deliver_tool = StructuredTool.from_function(derive_days_to_deliver)
+        decide_cancel_order_tool = StructuredTool.from_function(decide_cancel_order)
+        cancel_order_tool = StructuredTool.from_function(cancel_order)
+        search_web_tool = StructuredTool.from_function(search_web)
+        send_email_tool = StructuredTool.from_function(send_email)
+        product_support_agent_tool = StructuredTool.from_function( product_support_agent)
+        order_support_agent_tool = StructuredTool.from_function(order_support_agent)
+        query_similar_entities_tool = StructuredTool.from_function(query_similar_entities)
+        search_products_tool = StructuredTool.from_function(search_products)
+        fetch_product_details_tool = StructuredTool.from_function(fetch_product_details)
+        buyer_support_agent_tool = StructuredTool.from_function(buyer_support_agent)
+        buy_one_click_tool = StructuredTool.from_function(buy_one_click)
+        
+        self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
-                                      domain='Amazon',
+                                      domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
                                       owner='Ordering',
-                                      trait='API',
+                                      trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       tool=fetch_orders_tool))
-        identify_relevant_order_tool = StructuredTool.from_function(identify_relevant_order)
-        self.tools.append(SupportTool(type='Answer',
+        self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
-                                      domain='Amazon',
+                                      domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
                                       owner='AI Builder',
-                                      trait='NLI',
-                                      llm='Claude-2',
+                                      trait='Natural Language Interface(NLI)',
+                                      llm='Flan-T5 XXL',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=identify_relevant_order_tool))
-        text_to_sql_tool = StructuredTool.from_function(text_to_sql)
-        self.tools.append(SupportTool(type='Answer',
+        self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
-                                      domain='AWS',
-                                      domainImg='/static/support_app/aws_icon.svg',
+                                      domain='Amazon Web Service',
+                                      domainImg='/static/support_app/aws_icon.png',
                                       owner='ExpertQ',
-                                      trait='NLI',
+                                      trait='Natural Language Interface(NLI)',
                                       llm='Unpublished',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=text_to_sql_tool))
-        derive_days_to_deliver_tool = StructuredTool.from_function(derive_days_to_deliver)
-        self.tools.append(SupportTool(type='Answer',
+        self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
-                                      domain='Amazon',
+                                      domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
                                       owner='AI Builder',
-                                      trait='NLI',
+                                      trait='Natural Language Interface(NLI)',
                                       llm='GPT-3.5 Turbo',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=derive_days_to_deliver_tool))
-        decide_cancel_order_tool = StructuredTool.from_function(decide_cancel_order)
-        self.tools.append(SupportTool(type='Answer',
+        self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
-                                      domain='Amazon',
+                                      domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
                                       owner='AI Builder',
-                                      trait='NLI',
+                                      trait='Natural Language Interface(NLI)',
                                       llm='Llama-2 7B',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=decide_cancel_order_tool))
-        cancel_order_tool = StructuredTool.from_function(cancel_order)
-        self.tools.append(SupportTool(type='Action',
+        self.tools.append(SupportTool(type='Action Tool',
                                       typeImg='/static/support_app/action_icon.png',
-                                      domain='Amazon',
+                                      domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
                                       owner='Ordering',
-                                      trait='API',
+                                      trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       tool=cancel_order_tool))
-        search_web_tool = StructuredTool.from_function(search_web)
-        self.tools.append(SupportTool(type='Answer',
+        self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='External',
                                       domainImg='/static/support_app/external_icon.png',
                                       owner='AI Builder',
-                                      trait='API',
+                                      trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       tool=search_web_tool))
-        send_email_tool = StructuredTool.from_function(send_email)
-        self.tools.append(SupportTool(type='Action',
+        self.tools.append(SupportTool(type='Action Tool',
                                       typeImg='/static/support_app/action_icon.png',
-                                      domain='AWS',
-                                      domainImg='/static/support_app/aws_icon.svg',
+                                      domain='Amazon Web Service',
+                                      domainImg='/static/support_app/aws_icon.png',
                                       owner='SimpleEmailService',
-                                      trait='API',
+                                      trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       tool=send_email_tool))
-        query_product_catalog_tool = StructuredTool.from_function(query_product_catalog)
-        self.tools.append(SupportTool(type='Answer',
-                                      typeImg='/static/support_app/answer_icon.png',
-                                      domain='Amazon',
+        self.tools.append(SupportTool(type='Agent Tool',
+                                      typeImg='/static/support_app/composite_icon.png',
+                                      domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
-                                      owner='Catalog Platform',
-                                      trait='NLI',
-                                      llm='Flan-T5 XXL',
+                                      owner='Search Experience',
+                                      trait='Natural Language Interface(NLI)',
+                                      llm='Proprietary',
                                       traitImg='/static/support_app/nli_icon.png',
-                                      tool=query_product_catalog_tool))
-        query_similar_entities_tool = StructuredTool.from_function(query_similar_entities)
-        self.tools.append(SupportTool(type='Answer',
+                                      tool= product_support_agent_tool,
+                                      tools_used=[search_products_tool,
+                                                  fetch_product_details_tool,
+                                                  query_similar_entities_tool]))
+        self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
-                                      domain='Amazon',
+                                      domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
                                       owner='AI Builder',
-                                      trait='API',
+                                      trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       tool=query_similar_entities_tool))
-        order_support_agent_tool = StructuredTool.from_function(order_support_agent)
-        self.tools.append(SupportTool(type='Composite',
+        self.tools.append(SupportTool(type='Agent Tool',
                                       typeImg='/static/support_app/composite_icon.png',
-                                      domain='Amazon',
+                                      domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
                                       owner='Ordering',
-                                      trait='NLI',
+                                      trait='Natural Language Interface(NLI)',
                                       traitImg='/static/support_app/nli_icon.png',
                                       llm='GPT-4',
                                       tool=order_support_agent_tool,
@@ -160,6 +172,43 @@ class SupportTools() :
                                                   derive_days_to_deliver_tool,
                                                   decide_cancel_order_tool,
                                                   cancel_order_tool]))
+        self.tools.append(SupportTool(type='Answer Tool',
+                                      typeImg='/static/support_app/answer_icon.png',
+                                      domain='Amazon Retail',
+                                      domainImg='/static/support_app/amazon_icon.png',
+                                      owner='Product Search',
+                                      trait='Application Programming Interface(API)',
+                                      traitImg='/static/support_app/api_icon.png',
+                                      tool=search_products_tool))
+        self.tools.append(SupportTool(type='Answer Tool',
+                                      typeImg='/static/support_app/answer_icon.png',
+                                      domain='Amazon Retail',
+                                      domainImg='/static/support_app/amazon_icon.png',
+                                      owner='Product Catalog',
+                                      trait='Application Programming Interface(API)',
+                                      traitImg='/static/support_app/api_icon.png',
+                                      tool=fetch_product_details_tool))
+        self.tools.append(SupportTool(type='Action Tool',
+                                      typeImg='/static/support_app/action_icon.png',
+                                      domain='Amazon Retail',
+                                      domainImg='/static/support_app/amazon_icon.png',
+                                      owner='Ordering',
+                                      trait='Application Programming Interface(API)',
+                                      traitImg='/static/support_app/api_icon.png',
+                                      tool=buy_one_click_tool))
+        self.tools.append(SupportTool(type='Agent Tool',
+                                      typeImg='/static/support_app/composite_icon.png',
+                                      domain='Amazon Retail',
+                                      domainImg='/static/support_app/amazon_icon.png',
+                                      owner='Customer Support',
+                                      trait='Natural Language Interface(NLI)',
+                                      traitImg='/static/support_app/nli_icon.png',
+                                      llm='Claude-2',
+                                      tool=buyer_support_agent_tool,
+                                      tools_used=[query_similar_entities_tool,
+                                                  order_support_agent_tool,
+                                                  product_support_agent_tool,
+                                                  buy_one_click_tool]))
                                       
 
     def get_tools(self) -> list[SupportTool] :
