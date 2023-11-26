@@ -6,7 +6,7 @@
   <div class="w3-container">
     <h2><b>AI Tool Registry</b></h2>
   </div>
-  <table class="table">
+  <table class="table cell">
     <colgroup>
       <col class="tool-columns">
       <col class="tool-columns">
@@ -16,23 +16,75 @@
     </colgroup>
     <thead>
         <tr>
+            <th><span class="visually-hidden">Toggle</span></th>
             <th>Type</th>
+            <th>Name</th>
             <th>Trait</th>
             <th>Domain</th>
-            <th>Name</th>
-            <th>Description</th>
+            <th>Owner</th>
         </tr>
     </thead>
     <tbody>
         {% for tool in tools %}
             <tr>
-              <td><img src="{{tool.typeImg}}" alt="" width="30" height="30"><pre>{{tool.type}}</pre></td>
-              <td><img src="{{tool.traitImg}}" alt="" width="30" height="30"><pre>{{tool.trait}}</pre></td>
-              <td><img src="{{tool.domainImg}}" alt="" width="30" height="30"><pre>{{tool.domain}}</pre></td>
-              <td><span class="tool-name"><b>{{tool.name}}</b></span></td>
+              <td>
+                <button type="button" id="{{tool.name}}" aria-expanded="false" onclick="toggle(this.id, '{{tool.trait}}');">
+                <svg xmlns="\http://www.w3.org/2000/svg&quot;" viewBox="0 0 80 80" focusable="false"><path d="M70.3 13.8L40 66.3 9.7 13.8z"></path></svg>
+                </button>
+              </td>
+              <td><img src="{{tool.typeImg}}" alt="" width="50" height="50"></td>
+              <td align="left"><span class="tool-name"><b>{{tool.name}}</b></span></td>
+              <td><img src="{{tool.traitImg}}" alt="" width="50" height="50"></td>
+              <td><img src="{{tool.domainImg}}" alt="" width="50" height="50"></td>
+              <td>{{tool.owner}}</td>
+            </tr>
+            </tr>
+            {% if tool.trait == "NLI" %}
+              <tr = class="hidden" id="{{tool.name}}-internal">
+                <td></td>
+                <td><b>LLM</b></td>
+                <td class="tool-name"><b>{{tool.llm}}</b></td>
+                <td><b>Tools</b></td>
+                <td></td>
+                <td class="tool-name">
+                  {% for name in tool.tools %}
+                    <pre><b>{{name}}</b></pre>
+                  {% endfor %}
+                </td>
+              </tr>
+            {% endif %}
+            <tr = class="hidden" id="{{tool.name}}-details">
+              <td colspan="3"></td>
+              <td><b>Description</b></td>
+              <td></td>
               <td>{{tool.description}}</td>
             </tr>
         {% endfor %}
     </tbody>
   </table>
+  <div>
+    <script>
+      function toggle(btnID, trait) {
+        var theButton = document.getElementById(btnID);
+        var theRows = [document.getElementById(btnID+'-details')];
+        if (trait === 'NLI') {
+          theRows.push(document.getElementById(btnID+'-internal'));
+        }
+        
+        if (theButton.getAttribute("aria-expanded") == "false") {
+          for (var i = 0; i < theRows.length; i++) {
+            theRows[i].classList.add("shown");
+            theRows[i].classList.remove("hidden");
+          }
+          theButton.setAttribute("aria-expanded", "true");
+        } else {
+          for (var i = 0; i < theRows.length; i++) {
+            theRows[i].classList.add("hidden");
+            theRows[i].classList.remove("shown");
+          }
+          theButton.setAttribute("aria-expanded", "false");
+        }
+      }
+    </script>
+  </div>
 {% endblock %}

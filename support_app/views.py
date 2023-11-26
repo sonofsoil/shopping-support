@@ -14,4 +14,4 @@ def tools(request):
     return render(request, "support_app/tools.html", {"tools": tools})
 
 def home(request):
-    return render(request, "support_app/home.html")    
+    return render(request, "support_app/home.html")

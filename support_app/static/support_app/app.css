@@ -834,7 +834,9 @@ nav .links {
 
 table {
   table-layout: auto;
-  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
   border-collapse: collapse;
   border: 3px solid purple;
 }
@@ -872,16 +874,6 @@ h2 {
   max-width: 1000px;
   margin: 0 auto;
   padding: 2vmax;
-  text-align: center;
-}
-
-.tool-columns {
-  width: 200px;
-  text-align: center;
-}
-
-.tool-columns {
-  width: 200px;
   text-align: center;
 }
 
@@ -955,4 +947,63 @@ h2 {
   text-transform: uppercase;
   color: blue;
   font-family: "Lucida Console";
+}
+
+.cell button {
+  font-size: 60%;
+  color: #000;
+  background-color: #00f;
+  padding: 0.3em 0.2em 0 0.2em;
+  border: 0.2em solid #00f;
+  border-radius: 50%;
+  line-height: 1;
+  text-align: center;
+  text-indent: 0;
+  transform: rotate(270deg);
+}
+
+.cell button svg {
+  width: 1.25em;
+  height: 1.25em;
+  fill: #fff;
+  transition: transform 0.25s ease-in;
+  transform-origin: center 45%;
+}
+
+.cell button:hover,
+.cell button:focus {
+  background-color: #fff;
+  outline: none;
+}
+
+.cell button:hover svg,
+.cell button:focus svg {
+  fill: #00f;
+}
+
+/* Lean on programmatic state for styling */
+.cell button[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+/* Proven method to visually hide something but */
+/* still make it available to assistive technology */
+.visually-hidden {
+  position: absolute;
+  top: auto;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); /* IE 6/7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
+}
+
+tr.shown, tr.hidden {
+  background-color: #eee;
+  display: table-row;
+}
+
+tr.hidden {
+  display: none;
 }
