@@ -853,6 +853,7 @@ tfoot th {
 th {
   letter-spacing: 2px;
   background-color: coral;
+  font-size: 22px;
 }
 
 td {
