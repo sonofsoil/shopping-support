@@ -46,7 +46,7 @@
                 <td class="llm-name"><b>{{tool.llm}}</b></td>
                 <td><b>Tools</b></td>
                 <td></td>
-                <td class="tool-name">
+                <td class="inner-tool-name">
                   {% for name in tool.tools %}
                     <pre><b>{{name}}</b></pre>
                   {% endfor %}
@@ -54,10 +54,12 @@
               </tr>
             {% endif %}
             <tr = class="hidden" id="{{tool.name}}-details">
-              <td colspan="3"></td>
+              <td></td>
+              <td><b>Round Trip Time(RTT)</b></td>
+              <td>{{tool.rtt}}</td>
               <td><b>Description</b></td>
               <td></td>
-              <td>{{tool.description}}</td>
+              <td style="text-align:left;">{{tool.description}}</td>
             </tr>
         {% endfor %}
     </tbody>

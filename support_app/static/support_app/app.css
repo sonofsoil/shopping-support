@@ -949,9 +949,15 @@ h2 {
   font-family: "Lucida Console";
 }
 
+.inner-tool-name {
+  text-transform: uppercase;
+  color: mediumvioletred;
+  font-family: "Lucida Console";
+}
+
 .llm-name {
   text-transform: uppercase;
-  color: darkmagenta;
+  color: green;
   font-family: "Lucida Console";
 }
 

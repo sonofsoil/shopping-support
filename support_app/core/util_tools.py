@@ -113,3 +113,10 @@ def buy_one_click(user_id: str, product_id : str) -> None :
     :param product_id: product ID to buy
     """
     pass
+
+def query_support_sops(user_query : str) -> str :
+    """Answers any query related to customer support SOPs. This tool
+    uses RAG pattern and retrieves from a vector database with all
+    Customer SOPs before invoking LLM. 
+    """
+    pass

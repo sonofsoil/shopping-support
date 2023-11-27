@@ -14,6 +14,7 @@ from support_app.core.util_tools import (
     fetch_product_details,
     buyer_support_agent,
     buy_one_click,
+    query_support_sops,
 )
 
 class SupportTool() :
@@ -27,6 +28,7 @@ class SupportTool() :
     owner : str = None
     llm : str = None
     tools_used : list[StructuredTool] = None
+    rtt : str = None
 
     def __init__(self, type : str,
                  typeImg : str,
@@ -35,6 +37,7 @@ class SupportTool() :
                  domainImg: str,
                  trait : str,
                  traitImg : str,
+                 rtt : str,
                  tool : StructuredTool,
                  llm : str = None,
                  tools_used : list[StructuredTool] = []) -> None:
@@ -48,6 +51,7 @@ class SupportTool() :
         self.tool = tool
         self.tools_used = tools_used
         self.llm = llm
+        self.rtt = rtt
 
 class SupportTools() :
     tools : list[SupportTool]
@@ -64,6 +68,7 @@ class SupportTools() :
         send_email_tool = StructuredTool.from_function(send_email)
         product_support_agent_tool = StructuredTool.from_function( product_support_agent)
         order_support_agent_tool = StructuredTool.from_function(order_support_agent)
+        query_support_sops_tool = StructuredTool.from_function(query_support_sops)
         query_similar_entities_tool = StructuredTool.from_function(query_similar_entities)
         search_products_tool = StructuredTool.from_function(search_products)
         fetch_product_details_tool = StructuredTool.from_function(fetch_product_details)
@@ -77,6 +82,7 @@ class SupportTools() :
                                       owner='Ordering',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
+                                      rtt='p99 100 ms',
                                       tool=fetch_orders_tool))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
@@ -85,15 +91,17 @@ class SupportTools() :
                                       owner='AI Builder',
                                       trait='Natural Language Interface(NLI)',
                                       llm='Flan-T5 XXL',
+                                      rtt='1 - 3 sec',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=identify_relevant_order_tool))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Web Service',
                                       domainImg='/static/support_app/aws_icon.png',
-                                      owner='ExpertQ',
+                                      owner='Redshift Spectrum',
                                       trait='Natural Language Interface(NLI)',
                                       llm='Unpublished',
+                                      rtt='1 - 5 sec',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=text_to_sql_tool))
         self.tools.append(SupportTool(type='Answer Tool',
@@ -103,6 +111,7 @@ class SupportTools() :
                                       owner='AI Builder',
                                       trait='Natural Language Interface(NLI)',
                                       llm='GPT-3.5 Turbo',
+                                      rtt='1 - 2 sec',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=derive_days_to_deliver_tool))
         self.tools.append(SupportTool(type='Answer Tool',
@@ -112,6 +121,7 @@ class SupportTools() :
                                       owner='AI Builder',
                                       trait='Natural Language Interface(NLI)',
                                       llm='Llama-2 7B',
+                                      rtt='< 1 sec',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=decide_cancel_order_tool))
         self.tools.append(SupportTool(type='Action Tool',
@@ -119,9 +129,21 @@ class SupportTools() :
                                       domain='Amazon Retail',
                                       domainImg='/static/support_app/amazon_icon.png',
                                       owner='Ordering',
+                                      rtt='p99 80 ms',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       tool=cancel_order_tool))
+        self.tools.append(SupportTool(type='Answer Tool',
+                                      typeImg='/static/support_app/answer_icon.png',
+                                      domain='Amazon Retail',
+                                      domainImg='/static/support_app/amazon_icon.png',
+                                      owner='Customer Support',
+                                      trait='Natural Language Interface(NLI)',
+                                      llm='Proprietary',
+                                      rtt='1 - 3 sec',
+                                      traitImg='/static/support_app/nli_icon.png',
+                                      tool=query_support_sops_tool,
+                                      tools_used=[query_similar_entities_tool]))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='External',
@@ -129,6 +151,7 @@ class SupportTools() :
                                       owner='AI Builder',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
+                                      rtt='p99 150 ms',
                                       tool=search_web_tool))
         self.tools.append(SupportTool(type='Action Tool',
                                       typeImg='/static/support_app/action_icon.png',
@@ -137,6 +160,7 @@ class SupportTools() :
                                       owner='SimpleEmailService',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
+                                      rtt='p99 50 ms',
                                       tool=send_email_tool))
         self.tools.append(SupportTool(type='Agent Tool',
                                       typeImg='/static/support_app/composite_icon.png',
@@ -145,6 +169,7 @@ class SupportTools() :
                                       owner='Search Experience',
                                       trait='Natural Language Interface(NLI)',
                                       llm='Proprietary',
+                                      rtt='5 - 15 sec',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool= product_support_agent_tool,
                                       tools_used=[search_products_tool,
@@ -157,6 +182,7 @@ class SupportTools() :
                                       owner='AI Builder',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
+                                      rtt='p99 450 ms',
                                       tool=query_similar_entities_tool))
         self.tools.append(SupportTool(type='Agent Tool',
                                       typeImg='/static/support_app/composite_icon.png',
@@ -166,6 +192,7 @@ class SupportTools() :
                                       trait='Natural Language Interface(NLI)',
                                       traitImg='/static/support_app/nli_icon.png',
                                       llm='GPT-4',
+                                      rtt='5 - 30 sec',
                                       tool=order_support_agent_tool,
                                       tools_used=[fetch_orders_tool,
                                                   identify_relevant_order_tool,
@@ -179,6 +206,7 @@ class SupportTools() :
                                       owner='Product Search',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
+                                      rtt='p99 200 ms',
                                       tool=search_products_tool))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
@@ -187,6 +215,7 @@ class SupportTools() :
                                       owner='Product Catalog',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
+                                      rtt='p99 250 ms',
                                       tool=fetch_product_details_tool))
         self.tools.append(SupportTool(type='Action Tool',
                                       typeImg='/static/support_app/action_icon.png',
@@ -195,6 +224,7 @@ class SupportTools() :
                                       owner='Ordering',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
+                                      rtt='p99 1.5 sec',
                                       tool=buy_one_click_tool))
         self.tools.append(SupportTool(type='Agent Tool',
                                       typeImg='/static/support_app/composite_icon.png',
@@ -204,8 +234,10 @@ class SupportTools() :
                                       trait='Natural Language Interface(NLI)',
                                       traitImg='/static/support_app/nli_icon.png',
                                       llm='Claude-2',
+                                      rtt='5 - 35 sec',
                                       tool=buyer_support_agent_tool,
-                                      tools_used=[query_similar_entities_tool,
+                                      tools_used=[query_support_sops_tool,
+                                                  query_similar_entities_tool,
                                                   order_support_agent_tool,
                                                   product_support_agent_tool,
                                                   buy_one_click_tool]))
@@ -231,5 +263,6 @@ class SupportTools() :
                 'owner': tool.owner,
                 'llm': tool.llm,
                 'tools': [t.name for t in tool.tools_used],
+                'rtt': tool.rtt,
             })
         return tl
