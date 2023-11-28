@@ -242,12 +242,12 @@ pre code {
 }
 
 .tool {
-  color: GoldenRod;
+  color: gold;
   font: 11pt/1.25 Monaco, monospace;
 }
 
 .answer {
-  color: LightCoral;
+  color: deeppink;
   font: 11pt/1.25 Monaco, monospace;
 }
 
