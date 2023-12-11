@@ -22,6 +22,7 @@
             <th>Trait</th>
             <th>Domain</th>
             <th>Owner</th>
+            <th>Impls</th>
         </tr>
     </thead>
     <tbody>
@@ -37,6 +38,11 @@
               <td><span title="{{tool.trait}}"><img src="{{tool.traitImg}}" alt="" width="50" height="50"></span></td>
               <td><span title="{{tool.domain}}"><img src="{{tool.domainImg}}" alt="" width="50" height="50"></span></td>
               <td>{{tool.owner}}</td>
+              <td>
+                {% for impl in tool.impls %}
+                  <span title="{{impl.impl}}"><img src="{{impl.implImg}}" alt="" width="30" height="30"></span>
+                {% endfor %}
+              </td>
             </tr>
             </tr>
             {% if "NLI" in tool.trait %}

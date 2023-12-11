@@ -29,6 +29,7 @@ class SupportTool() :
     llm : str = None
     tools_used : list[StructuredTool] = None
     rtt : str = None
+    impls : list[str] = None
 
     def __init__(self, type : str,
                  typeImg : str,
@@ -40,7 +41,8 @@ class SupportTool() :
                  rtt : str,
                  tool : StructuredTool,
                  llm : str = None,
-                 tools_used : list[StructuredTool] = []) -> None:
+                 tools_used : list[StructuredTool] = [],
+                 impls : list[str] = []) -> None:
         self.type = type
         self.typeImg = typeImg
         self.domain = domain
@@ -52,6 +54,7 @@ class SupportTool() :
         self.tools_used = tools_used
         self.llm = llm
         self.rtt = rtt
+        self.impls = impls
 
 class SupportTools() :
     tools : list[SupportTool]
@@ -93,7 +96,8 @@ class SupportTools() :
                                       llm='Flan-T5 XXL',
                                       rtt='1 - 3 sec',
                                       traitImg='/static/support_app/nli_icon.png',
-                                      tool=identify_relevant_order_tool))
+                                      tool=identify_relevant_order_tool,
+                                      impls=['LangChain']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Web Service',
@@ -103,7 +107,8 @@ class SupportTools() :
                                       llm='Unpublished',
                                       rtt='1 - 5 sec',
                                       traitImg='/static/support_app/nli_icon.png',
-                                      tool=text_to_sql_tool))
+                                      tool=text_to_sql_tool,
+                                      impls=['Amazon Q']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Retail',
@@ -113,7 +118,8 @@ class SupportTools() :
                                       llm='GPT-3.5 Turbo',
                                       rtt='1 - 2 sec',
                                       traitImg='/static/support_app/nli_icon.png',
-                                      tool=derive_days_to_deliver_tool))
+                                      tool=derive_days_to_deliver_tool,
+                                      impls=['LangChain', 'Bedrock']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Retail',
@@ -123,7 +129,8 @@ class SupportTools() :
                                       llm='Llama-2 7B',
                                       rtt='< 1 sec',
                                       traitImg='/static/support_app/nli_icon.png',
-                                      tool=decide_cancel_order_tool))
+                                      tool=decide_cancel_order_tool,
+                                      impls=['LangChain']))
         self.tools.append(SupportTool(type='Action Tool',
                                       typeImg='/static/support_app/action_icon.png',
                                       domain='Amazon Retail',
@@ -143,7 +150,8 @@ class SupportTools() :
                                       rtt='1 - 3 sec',
                                       traitImg='/static/support_app/nli_icon.png',
                                       tool=query_support_sops_tool,
-                                      tools_used=[query_similar_entities_tool]))
+                                      tools_used=[query_similar_entities_tool],
+                                      impls=['Amazon Q']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='External',
@@ -174,7 +182,8 @@ class SupportTools() :
                                       tool= product_support_agent_tool,
                                       tools_used=[search_products_tool,
                                                   fetch_product_details_tool,
-                                                  query_similar_entities_tool]))
+                                                  query_similar_entities_tool],
+                                      impls=['Bedrock', 'Amazon Q']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Retail',
@@ -198,7 +207,8 @@ class SupportTools() :
                                                   identify_relevant_order_tool,
                                                   derive_days_to_deliver_tool,
                                                   decide_cancel_order_tool,
-                                                  cancel_order_tool]))
+                                                  cancel_order_tool],
+                                      impls=['LangChain', 'Amazon Q']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Retail',
@@ -240,7 +250,8 @@ class SupportTools() :
                                                   query_similar_entities_tool,
                                                   order_support_agent_tool,
                                                   product_support_agent_tool,
-                                                  buy_one_click_tool]))
+                                                  buy_one_click_tool],
+                                      impls=['LangChain', 'Bedrock']))
                                       
 
     def get_tools(self) -> list[SupportTool] :
@@ -251,6 +262,24 @@ class SupportTools() :
         for tool in self.tools :
             startD = tool.tool.description.find(' - ') + 3
             endD = tool.tool.description.find(':param')
+            impl_list = []
+            for impl in tool.impls:
+                if impl == 'Bedrock':
+                    impl_list.append({
+                        'impl': impl,
+                        'implImg': '/static/support_app/bedrock.png',
+                    })
+                elif impl == 'Amazon Q':
+                    impl_list.append({
+                        'impl': impl,
+                        'implImg': '/static/support_app/amazon_q.png',
+                    })
+                elif impl == 'LangChain':
+                    impl_list.append({
+                        'impl': impl,
+                        'implImg': '/static/support_app/langchain.png',
+                    })
+
             tl.append({
                 'type' : tool.type,
                 'typeImg': tool.typeImg,
@@ -264,5 +293,6 @@ class SupportTools() :
                 'llm': tool.llm,
                 'tools': [t.name for t in tool.tools_used],
                 'rtt': tool.rtt,
+                'impls': impl_list,
             })
         return tl
