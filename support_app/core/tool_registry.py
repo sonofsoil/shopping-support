@@ -86,7 +86,8 @@ class SupportTools() :
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       rtt='p99 100 ms',
-                                      tool=fetch_orders_tool))
+                                      tool=fetch_orders_tool,
+                                      impls=['Python SDK']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Retail',
@@ -139,7 +140,8 @@ class SupportTools() :
                                       rtt='p99 80 ms',
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
-                                      tool=cancel_order_tool))
+                                      tool=cancel_order_tool,
+                                      impls=['Python SDK']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Retail',
@@ -160,7 +162,8 @@ class SupportTools() :
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       rtt='p99 150 ms',
-                                      tool=search_web_tool))
+                                      tool=search_web_tool,
+                                      impls=['Lambda Function']))
         self.tools.append(SupportTool(type='Action Tool',
                                       typeImg='/static/support_app/action_icon.png',
                                       domain='Amazon Web Service',
@@ -169,7 +172,8 @@ class SupportTools() :
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       rtt='p99 50 ms',
-                                      tool=send_email_tool))
+                                      tool=send_email_tool,
+                                      impls=['Lambda Function', 'Python SDK']))
         self.tools.append(SupportTool(type='Agent Tool',
                                       typeImg='/static/support_app/composite_icon.png',
                                       domain='Amazon Retail',
@@ -192,7 +196,8 @@ class SupportTools() :
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       rtt='p99 450 ms',
-                                      tool=query_similar_entities_tool))
+                                      tool=query_similar_entities_tool,
+                                      impls=['Lambda Function']))
         self.tools.append(SupportTool(type='Agent Tool',
                                       typeImg='/static/support_app/composite_icon.png',
                                       domain='Amazon Retail',
@@ -217,7 +222,8 @@ class SupportTools() :
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       rtt='p99 200 ms',
-                                      tool=search_products_tool))
+                                      tool=search_products_tool,
+                                      impls=['Lambda Function', 'Python SDK']))
         self.tools.append(SupportTool(type='Answer Tool',
                                       typeImg='/static/support_app/answer_icon.png',
                                       domain='Amazon Retail',
@@ -226,7 +232,8 @@ class SupportTools() :
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       rtt='p99 250 ms',
-                                      tool=fetch_product_details_tool))
+                                      tool=fetch_product_details_tool,
+                                      impls=['Python SDK']))
         self.tools.append(SupportTool(type='Action Tool',
                                       typeImg='/static/support_app/action_icon.png',
                                       domain='Amazon Retail',
@@ -235,7 +242,8 @@ class SupportTools() :
                                       trait='Application Programming Interface(API)',
                                       traitImg='/static/support_app/api_icon.png',
                                       rtt='p99 1.5 sec',
-                                      tool=buy_one_click_tool))
+                                      tool=buy_one_click_tool,
+                                      impls=['Lambda Function', 'Python SDK']))
         self.tools.append(SupportTool(type='Agent Tool',
                                       typeImg='/static/support_app/composite_icon.png',
                                       domain='Amazon Retail',
@@ -278,6 +286,16 @@ class SupportTools() :
                     impl_list.append({
                         'impl': impl,
                         'implImg': '/static/support_app/langchain.png',
+                    })
+                elif impl == 'Lambda Function':
+                    impl_list.append({
+                        'impl': impl,
+                        'implImg': '/static/support_app/lambda.svg',
+                    })
+                elif impl == 'Python SDK':
+                    impl_list.append({
+                        'impl': impl,
+                        'implImg': '/static/support_app/python.svg',
                     })
 
             tl.append({
